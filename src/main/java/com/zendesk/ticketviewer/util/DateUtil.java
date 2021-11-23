@@ -2,11 +2,16 @@ package com.zendesk.ticketviewer.util;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 
 public class DateUtil {
 
 	public static ZonedDateTime getDate(String dateStr) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-		return ZonedDateTime.parse("2017-04-26T20:55:00.000Z", formatter);
+		TemporalAccessor accessor = DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(dateStr);
+		return ZonedDateTime.from(accessor);
+	}
+	
+	public static String getHumanReadableDate(ZonedDateTime zonedDateTime) {
+		return zonedDateTime.toString();
 	}
 }

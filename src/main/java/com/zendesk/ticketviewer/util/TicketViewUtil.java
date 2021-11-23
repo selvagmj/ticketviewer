@@ -12,8 +12,34 @@ import com.zendesk.ticketviewer.Ticket.TicketParams;
 public class TicketViewUtil {
 
 	public static String getFullTicketDetailsPrint(Ticket ticket) {
-		
-		return ticket.toString();
+		StringBuilder sb = new StringBuilder();
+		sb.append("Id").append(":").append(ticket.getId()).append("\n");
+		sb.append("Requester Id").append(":").append(ticket.getRequesterId()).append("\n");
+		if(ticket.getPriority() != null) {
+			sb.append("Priority").append(":").append(ticket.getPriority()).append("\n");
+		}
+		if(ticket.getSubject() != null) {
+			sb.append("Subject").append(":").append(ticket.getSubject()).append("\n");
+		}
+		if(ticket.getDescritpion() != null) {
+			sb.append("Description").append(":").append(ticket.getDescritpion()).append("\n");
+		}
+		if(ticket.getUpdatedAt() != null) {
+			sb.append("Updated At").append(":").append(ticket.getUpdatedAt()).append("\n");
+		}
+		if(ticket.getStatus() != null) {
+			sb.append("Status").append(":").append(ticket.getStatus()).append("\n");
+		}
+		if(ticket.getAssigneeId() != null) {
+			sb.append("Assignee Id").append(":").append(ticket.getAssigneeId()).append("\n");
+		}
+		if(ticket.getDueAt() != null) {
+			sb.append("Due At").append(":").append(ticket.getDueAt()).append("\n");
+		}
+		if(ticket.getTags() != null && !ticket.getTags().isEmpty()) {
+			sb.append("Tags").append(":").append(String.join(",", ticket.getTags())).append("\n");
+		}
+		return sb.toString();
 	}
 
 	public static String getTicketsPrint(Tickets tickets) {
