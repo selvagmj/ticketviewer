@@ -7,66 +7,92 @@ import java.util.Objects;
 
 import com.zendesk.ticketviewer.Ticket;
 import com.zendesk.ticketviewer.Tickets;
-import com.zendesk.ticketviewer.Ticket.TicketParams;
 
 public class TicketViewUtil {
+	private static final List<String> HEADERS = new ArrayList<>();
+	private static final List<Integer> WIDTHS = new ArrayList<>();
 
 	public static String getFullTicketDetailsPrint(Ticket ticket) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Id").append(":").append(ticket.getId()).append("\n");
-		sb.append("Requester Id").append(":").append(ticket.getRequesterId()).append("\n");
+		sb.append(TicketViewParams.ID)
+			.append(String.format("%" + (20 - TicketViewParams.ID.length()) + "s", ""))
+			.append(":")
+			.append(ticket.getId())
+			.append("\n");
+		
+		sb.append(TicketViewParams.REQUESTER_ID)
+			.append(String.format("%" + (20 - TicketViewParams.REQUESTER_ID.length()) + "s", ""))
+			.append(":")
+			.append(ticket.getRequesterId())
+			.append("\n");
 		if(ticket.getPriority() != null) {
-			sb.append("Priority").append(":").append(ticket.getPriority()).append("\n");
+			sb.append(TicketViewParams.PRIORITY)
+				.append(String.format("%" + (20 - TicketViewParams.PRIORITY.length()) + "s", ""))
+				.append(":")
+				.append(ticket.getPriority())
+				.append("\n");
 		}
 		if(ticket.getSubject() != null) {
-			sb.append("Subject").append(":").append(ticket.getSubject()).append("\n");
+			sb.append(TicketViewParams.SUBJECT)
+				.append(String.format("%" + (20 - TicketViewParams.SUBJECT.length()) + "s", ""))
+				.append(":")
+				.append(ticket.getSubject())
+				.append("\n");
 		}
 		if(ticket.getDescritpion() != null) {
-			sb.append("Description").append(":").append(ticket.getDescritpion()).append("\n");
+			sb.append(TicketViewParams.DESCRIPTION)
+				.append(String.format("%" + (20 - TicketViewParams.DESCRIPTION.length()) + "s", ""))
+				.append(":")
+				.append(ticket.getDescritpion())
+				.append("\n");
+		}
+		if(ticket.getCreatedAt() != null) {
+			sb.append(TicketViewParams.CREATED_AT)
+				.append(String.format("%" + (20 - TicketViewParams.CREATED_AT.length()) + "s", ""))
+				.append(":")
+				.append(DateUtil.getHumanReadableDate(ticket.getCreatedAt()))
+				.append("\n");
 		}
 		if(ticket.getUpdatedAt() != null) {
-			sb.append("Updated At").append(":").append(ticket.getUpdatedAt()).append("\n");
+			sb.append(TicketViewParams.UPDATED_AT)
+				.append(String.format("%" + (20 - TicketViewParams.UPDATED_AT.length()) + "s", ""))
+				.append(":")
+				.append(DateUtil.getHumanReadableDate(ticket.getUpdatedAt()))
+				.append("\n");
 		}
 		if(ticket.getStatus() != null) {
-			sb.append("Status").append(":").append(ticket.getStatus()).append("\n");
+			sb.append(TicketViewParams.STATUS)
+				.append(String.format("%" + (20 - TicketViewParams.STATUS.length()) + "s", ""))
+				.append(":")
+				.append(ticket.getStatus())
+				.append("\n");
 		}
 		if(ticket.getAssigneeId() != null) {
-			sb.append("Assignee Id").append(":").append(ticket.getAssigneeId()).append("\n");
+			sb.append(TicketViewParams.ASSIGNEE_ID)
+				.append(String.format("%" + (20 - TicketViewParams.ASSIGNEE_ID.length()) + "s", ""))
+				.append(":")
+				.append(ticket.getAssigneeId())
+				.append("\n");
 		}
 		if(ticket.getDueAt() != null) {
-			sb.append("Due At").append(":").append(ticket.getDueAt()).append("\n");
+			sb.append(TicketViewParams.DUE_AT)
+				.append(String.format("%" + (20 - TicketViewParams.DUE_AT.length()) + "s", ""))
+				.append(":")
+				.append(DateUtil.getHumanReadableDate(ticket.getDueAt()))
+				.append("\n");
 		}
 		if(ticket.getTags() != null && !ticket.getTags().isEmpty()) {
-			sb.append("Tags").append(":").append(String.join(",", ticket.getTags())).append("\n");
+			sb.append(TicketViewParams.TAGS)
+				.append(String.format("%" + (20 - TicketViewParams.TAGS.length()) + "s", ""))
+				.append(":")
+				.append(String.join(",", ticket.getTags()))
+				.append("\n");
 		}
 		return sb.toString();
 	}
 
 	public static String getTicketsPrint(Tickets tickets) {
-		List<String> headers = new ArrayList<>();
-		List<Integer> widths = new ArrayList<>();
-		
-		headers.add(TicketParams.ID);
-		widths.add(10);
-		
-		headers.add(TicketParams.PRIORITY);
-		widths.add(10);
-		
-		headers.add(TicketParams.SUBJECT);
-		widths.add(50);
-		
-		headers.add(TicketParams.REQUESTER_ID);
-		widths.add(20);
-		
-		headers.add(TicketParams.UPDATED_AT);
-		widths.add(20);
-		
-		headers.add(TicketParams.STATUS);
-		widths.add(10);
-		
-		headers.add(TicketParams.ASSIGNEE_ID);
-		widths.add(20);
-		
+		initializeHeaders();
 		List<List<Object>> rows = new ArrayList<>();
 		for(Ticket ticket : tickets.getTickets()) {
 			List<Object> row = new ArrayList<>();
@@ -74,13 +100,38 @@ public class TicketViewUtil {
 			row.add(ticket.getPriority());
 			row.add(ticket.getSubject());
 			row.add(ticket.getRequesterId());
-			row.add(ticket.getUpdatedAt());
+			row.add(DateUtil.getHumanReadableDate(ticket.getUpdatedAt()));
 			row.add(ticket.getStatus());
 			row.add(ticket.getAssigneeId());
 			rows.add(row);
 		}
 		
-		return tablePrint(headers, widths, rows);
+		return tablePrint(HEADERS, WIDTHS, rows);
+	}
+
+	private static void initializeHeaders() {
+		if(HEADERS.isEmpty()) {
+			HEADERS.add(TicketViewParams.ID);
+			WIDTHS.add(10);
+			
+			HEADERS.add(TicketViewParams.PRIORITY);
+			WIDTHS.add(10);
+			
+			HEADERS.add(TicketViewParams.SUBJECT);
+			WIDTHS.add(50);
+			
+			HEADERS.add(TicketViewParams.REQUESTER_ID);
+			WIDTHS.add(20);
+			
+			HEADERS.add(TicketViewParams.UPDATED_AT);
+			WIDTHS.add(35);
+			
+			HEADERS.add(TicketViewParams.STATUS);
+			WIDTHS.add(10);
+			
+			HEADERS.add(TicketViewParams.ASSIGNEE_ID);
+			WIDTHS.add(20);
+		}
 	}
 	
 	private static String tablePrint(List<String> headers, List<Integer> widths, List<List<Object>> rows) {
@@ -115,5 +166,20 @@ public class TicketViewUtil {
 			}
 			sb.append(" | ");
 		}
+	}
+
+	
+	public static final class TicketViewParams {
+		public static final String CREATED_AT = "created_at";
+		public static final String STATUS = "status";
+		public static final String SUBJECT = "subject";
+		public static final String DESCRIPTION = "description";
+		public static final String UPDATED_AT = "updated_at";
+		public static final String ID = "id";
+		public static final String REQUESTER_ID = "requester_id";
+		public static final String PRIORITY = "priority";
+		public static final String ASSIGNEE_ID = "assignee_id";
+		public static final String DUE_AT = "due_at";
+		public static final String TAGS = "tags";
 	}
 }

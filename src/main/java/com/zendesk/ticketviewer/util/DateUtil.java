@@ -12,6 +12,7 @@ public class DateUtil {
 	}
 	
 	public static String getHumanReadableDate(ZonedDateTime zonedDateTime) {
-		return zonedDateTime.toString();
+		DateTimeFormatter readableDateFormat = DateTimeFormatter.ofPattern("E, MMM dd, uuuu, HH:mm:ss");
+		return zonedDateTime.format(readableDateFormat);
 	}
 }
