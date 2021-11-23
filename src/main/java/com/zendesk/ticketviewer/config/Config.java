@@ -18,7 +18,7 @@ public class Config {
 			Properties prop = new Properties();
 			FileInputStream propsFile = new FileInputStream("src/main/resources/credentials.properties");
 			prop.load(propsFile);
-			// TODO : Add provision to give credentials while invoking jar 
+			// Used Put if absent to avoid replacing credentials given in command line while invoking jar 
 			PROPS.putIfAbsent("domain", prop.getProperty("domain"));
 			PROPS.putIfAbsent("username", prop.getProperty("username"));
 			PROPS.putIfAbsent("password", prop.getProperty("password"));

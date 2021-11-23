@@ -1,46 +1,63 @@
 package com.zendesk.ticketviewer;
 
-import java.net.URISyntaxException;
 import java.util.Scanner;
+import java.util.logging.LogManager;
 
 import com.zendesk.ticketviewer.api.TicketAPI;
 import com.zendesk.ticketviewer.config.Config;
 import com.zendesk.ticketviewer.util.TicketViewUtil;
+import com.zendesk.ticketviewer.util.TicketViewerUtil;
 
 public class Service {
+	
 
-	public static void main(String[] args) throws URISyntaxException {
+	private static final int MAX_PAGE_SIZE = 25;
+
+	private static final int GET_TICKETS = 1;
+	private static final int GET_TICKET = 2;
+	private static final int EXIT = 3;
+	private static final String NEXT = "next";
+	private static final String MAIN = "main";
+	private static final String PREVIOUS = "previous";
+
+	public static void main(String[] args) {
+		if(args == null || args.length != 1 || !args[0].equals("-l")) { 
+			LogManager.getLogManager().reset();
+		}
 		Scanner scans = new Scanner(System.in);
 		System.out.println("Welcome to Zendesk ticket viewer");
 		Config.initialize();
 		int num = 0;
-		while(num != 3) {
-			System.out.println("Enter 1 to view your tickets");
-			System.out.println("Enter 2 to view ticket by ticket id");
-			System.out.println("Enter 3 to exit");
+		while(num != EXIT) {
+			System.out.println("Enter " + GET_TICKETS + " to view your tickets");
+			System.out.println("Enter " + GET_TICKET + " to view ticket by ticket id");
+			System.out.println("Enter " + EXIT + " to exit");
 			
 			num = scans.nextInt();
-			if(num == 3) {
-				System.out.println("Thank you!");
+			if(num == EXIT) {
 				break;
 			}
-			else if(num == 2) {
+			else if(num == GET_TICKET) {
 				getTicketDetail(scans);
 			}
-			else if(num == 1) {
+			else if(num == GET_TICKETS) {
 				getTickets(scans);
 			}
+			else {
+				System.out.println("Invalid operation. Use the following operations only.");
+			}
 		}
+		System.out.println("Thank you!");
 	}
 
-	private static void getTickets(Scanner scans) throws URISyntaxException {
+	private static void getTickets(Scanner scans) {
 		int page = 0;
-		String operation = "next";
-		while(!operation.equals("main")) {
-			if(operation.equals("next")) {
+		String operation = NEXT;
+		while(!operation.equals(MAIN)) {
+			if(operation.equals(NEXT)) {
 				page += 1;
 			}
-			else if(operation.equals("previous")) {
+			else if(operation.equals(PREVIOUS)) {
 				page -= 1;
 			}
 			else {
@@ -48,7 +65,10 @@ public class Service {
 				return;
 			}
 			
-			Tickets tickets = TicketAPI.getTickets(page, 25);
+			Tickets tickets = TicketAPI.getTickets(page, MAX_PAGE_SIZE);
+			if(tickets == null) {
+				System.out.println("Cannot fetch tickets");	
+			}
 			if(tickets.getTickets().isEmpty()) {
 				System.out.println("You have reached the end of the list");
 				return;
@@ -57,36 +77,40 @@ public class Service {
 			System.out.println(ticketsPrint);
 			System.out.println("Current page: " + page);
 			if(tickets.isPrevious()) {
-				System.out.println("Enter \"previous\" for previous ");
+				System.out.println("Enter \"" + PREVIOUS + "\" for previous ");
 			}
 			if(tickets.isNext()) {
-				System.out.println("Enter \"next\" for next");
+				System.out.println("Enter \"" + NEXT + "\" for next");
 			}
-			System.out.println("Enter \"main\" for Main menu");
+			System.out.println("Enter \"" + MAIN + "\" for Main menu");
 			operation = scans.next();
-			if((!tickets.isNext() && operation.equals("next")) &&
-					(!tickets.isPrevious() && operation.equals("previous"))) {
+			if((!tickets.isNext() && operation.equals(NEXT)) ||
+					(!tickets.isPrevious() && operation.equals(PREVIOUS))) {
 				System.out.println("Invalid operation.");
 				return;
 			}
 		}
 	}
 
-	private static void getTicketDetail(Scanner scans) throws URISyntaxException {
-		System.out.println("Enter \"main\" for main menu");
+	private static void getTicketDetail(Scanner scans) {
+		System.out.println("Enter \"" + MAIN + "\" for Main menu");
 		System.out.println("Enter ticket id:");
 		String operationStr = scans.next();
-		if(operationStr.equals("main")) {
+		if(operationStr.equals(MAIN)) {
 			return;
 		}
-		long operation = Long.parseLong(operationStr);
+		Long operation = TicketViewerUtil.parseIfLong(operationStr);
+		if(operation == null) {
+			System.out.println("Invalid operation.");
+			return;
+		}
 		if(operation < 0) {
 			System.out.println("Invalid ticket id");
 			return;
 		}
 		Ticket ticket = TicketAPI.getTicket(operation);
 		if(ticket == null) {
-			System.out.println("Ticket with given ticket id does not exist");
+			System.out.println("Cannot fetch ticket with given ticket id");
 			return;
 		}
 		

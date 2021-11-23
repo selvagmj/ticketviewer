@@ -18,6 +18,7 @@ public class Ticket {
 	private ZonedDateTime updatedAt;
 	private long id;
 	private long requesterId;
+	// TODO : Convert this into enum as done for Ticket Status
 	private String priority;
 	private Long assigneeId;
 	private ZonedDateTime dueAt;
@@ -229,9 +230,10 @@ public class Ticket {
 	
 	@Override
 	public String toString() {
-		return "Ticket [createdAt=" + createdAt + ", status=" + status + ", subject=" + subject + ", updatedAt="
-				+ updatedAt + ", id=" + id + ", requesterId=" + requesterId + "]";
-	}	
+		return "Ticket [createdAt=" + createdAt + ", status=" + status + ", subject=" + subject + ", description="
+				+ description + ", updatedAt=" + updatedAt + ", id=" + id + ", requesterId=" + requesterId
+				+ ", priority=" + priority + ", assigneeId=" + assigneeId + ", dueAt=" + dueAt + ", tags=" + tags + "]";
+	}
 
 	public enum TicketStatus {
 		NEW(0),

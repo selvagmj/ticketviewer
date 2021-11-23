@@ -170,16 +170,16 @@ public class TicketViewUtil {
 
 	
 	public static final class TicketViewParams {
-		public static final String CREATED_AT = "created_at";
-		public static final String STATUS = "status";
-		public static final String SUBJECT = "subject";
-		public static final String DESCRIPTION = "description";
-		public static final String UPDATED_AT = "updated_at";
-		public static final String ID = "id";
-		public static final String REQUESTER_ID = "requester_id";
-		public static final String PRIORITY = "priority";
-		public static final String ASSIGNEE_ID = "assignee_id";
-		public static final String DUE_AT = "due_at";
-		public static final String TAGS = "tags";
+		public static final String CREATED_AT = "Created At";
+		public static final String STATUS = "Status";
+		public static final String SUBJECT = "Subject";
+		public static final String DESCRIPTION = "Description";
+		public static final String UPDATED_AT = "Updated At";
+		public static final String ID = "Id";
+		public static final String REQUESTER_ID = "Requester Id";
+		public static final String PRIORITY = "Priority";
+		public static final String ASSIGNEE_ID = "Assignee Id";
+		public static final String DUE_AT = "Due At";
+		public static final String TAGS = "Tags";
 	}
 }
