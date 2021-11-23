@@ -18,7 +18,8 @@ public class Ticket {
 	private ZonedDateTime updatedAt;
 	private long id;
 	private long requesterId;
-	// TODO : Convert this into enum as done for Ticket Status
+	// Convert this into enum as done for Ticket Status for bigger projects. Since this is just used as a client 
+	// it is useless to do so.
 	private String priority;
 	private Long assigneeId;
 	private ZonedDateTime dueAt;
@@ -82,7 +83,8 @@ public class Ticket {
 		return this.tags;
 	}
 
-	// Use jackson in case of large scale project 
+	// Used to convert the JSON obtained from tickets API to Ticket object. Better to use jackson in case of large scale project
+	// if the API structure support easy jackson conversion
 	public static Ticket parse(JSONObject ticketJSON) {
 		TicketBuilder ticketBuilder = new TicketBuilder();
 		
@@ -155,6 +157,8 @@ public class Ticket {
 		public static final String TAGS = "tags";
 	}
 	
+	// Used Builder since actual tickets object will have a large number of parameters many of which will
+	// require validation before setting them.
 	private static class TicketBuilder {
 		private ZonedDateTime createdAt;
 		private TicketStatus ticketStatus;
@@ -235,6 +239,8 @@ public class Ticket {
 				+ ", priority=" + priority + ", assigneeId=" + assigneeId + ", dueAt=" + dueAt + ", tags=" + tags + "]";
 	}
 
+	// Set an Id for every TicketStatus which will be useful when storing the Statuses in DB to reduce storage space occupied
+	// and to allow easy name changes in future.
 	public enum TicketStatus {
 		NEW(0),
 		OPEN(1),

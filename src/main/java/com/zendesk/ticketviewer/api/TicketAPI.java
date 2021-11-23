@@ -28,6 +28,9 @@ public class TicketAPI {
 		ticketHttpClient.addQueryParams("per_page", Objects.toString(pageSize));
 		ticketHttpClient.addQueryParams("page", Objects.toString(page));
 		Response response = ticketHttpClient.get();
+		
+		// Have added the same error message for all error response codes. But in actual implementation
+		// we have to find the corresponding error for every error code and send corresponding error message to client.
 		if(response == null ||
 				response.getHttpStatusCode() != 200 ||
 				response.getResponse() == null) {
@@ -82,7 +85,9 @@ public class TicketAPI {
 		TicketHttpClient ticketHttpClient = new TicketHttpClient();
 		ticketHttpClient.addPath(ticketId);
 		Response response = ticketHttpClient.get();
-		
+
+		// Have added the same error message for all error response codes. But in actual implementation
+		// we have to find the corresponding error for every error code and send corresponding error message to client.
 		if(response == null ||
 				response.getResponse() == null) {
 			LOGGER.log(Level.WARNING, "Cannot retrieve ticket details for given params");

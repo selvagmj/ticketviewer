@@ -2,6 +2,7 @@ package com.zendesk.ticketviewer;
 
 import java.util.List;
 
+// Tickets object mainly used for easy movement of data between Java APIs
 public class Tickets {
 
 	private List<Ticket> tickets;
@@ -26,6 +27,7 @@ public class Tickets {
 		return this.previousPage;
 	}
 	
+	// When there is no next page number it means there are no more ticket. 
 	public boolean isNext() {
 		return this.nextPage != null;
 	}

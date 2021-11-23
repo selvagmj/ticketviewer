@@ -6,13 +6,13 @@ import java.util.logging.LogManager;
 import com.zendesk.ticketviewer.api.TicketAPI;
 import com.zendesk.ticketviewer.config.Config;
 import com.zendesk.ticketviewer.util.TicketViewUtil;
-import com.zendesk.ticketviewer.util.TicketViewerUtil;
 
 public class Service {
 	
-
+	// Maximum Number of tickets displayed per page
 	private static final int MAX_PAGE_SIZE = 25;
 
+	// List of Operations accepted from console
 	private static final int GET_TICKETS = 1;
 	private static final int GET_TICKET = 2;
 	private static final int EXIT = 3;
@@ -21,6 +21,7 @@ public class Service {
 	private static final String PREVIOUS = "previous";
 
 	public static void main(String[] args) {
+		// Users can enable logging by using -l option
 		if(args == null || args.length != 1 || !args[0].equals("-l")) { 
 			LogManager.getLogManager().reset();
 		}
@@ -54,6 +55,7 @@ public class Service {
 		int page = 0;
 		String operation = NEXT;
 		while(!operation.equals(MAIN)) {
+			// Page incremented and decremented based on operation.
 			if(operation.equals(NEXT)) {
 				page += 1;
 			}
@@ -68,6 +70,7 @@ public class Service {
 			Tickets tickets = TicketAPI.getTickets(page, MAX_PAGE_SIZE);
 			if(tickets == null) {
 				System.out.println("Cannot fetch tickets");	
+				return;
 			}
 			if(tickets.getTickets().isEmpty()) {
 				System.out.println("You have reached the end of the list");
@@ -76,6 +79,7 @@ public class Service {
 			String ticketsPrint = TicketViewUtil.getTicketsPrint(tickets);
 			System.out.println(ticketsPrint);
 			System.out.println("Current page: " + page);
+			
 			if(tickets.isPrevious()) {
 				System.out.println("Enter \"" + PREVIOUS + "\" for previous ");
 			}
@@ -83,7 +87,9 @@ public class Service {
 				System.out.println("Enter \"" + NEXT + "\" for next");
 			}
 			System.out.println("Enter \"" + MAIN + "\" for Main menu");
+			
 			operation = scans.next();
+			// User cannot enter "next" or "previous" when next or previous set of tickets are not available
 			if((!tickets.isNext() && operation.equals(NEXT)) ||
 					(!tickets.isPrevious() && operation.equals(PREVIOUS))) {
 				System.out.println("Invalid operation.");
@@ -99,11 +105,12 @@ public class Service {
 		if(operationStr.equals(MAIN)) {
 			return;
 		}
-		Long operation = TicketViewerUtil.parseIfLong(operationStr);
+		Long operation = TicketViewUtil.parseIfLong(operationStr);
 		if(operation == null) {
 			System.out.println("Invalid operation.");
 			return;
 		}
+		// Ticket Id cannot be less than 0
 		if(operation < 0) {
 			System.out.println("Invalid ticket id");
 			return;

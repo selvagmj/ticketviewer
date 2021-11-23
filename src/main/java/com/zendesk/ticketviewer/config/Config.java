@@ -13,6 +13,9 @@ public class Config {
 	
 	private static final Map<String, String> PROPS = new HashMap<>();
 	
+	// Used to initialize the credentials from properties file. In case of different deployments we can change 
+	// the properties file to support the corresponding deployments. This function can be called during server 
+	// initialization explicitly or during the first time the credentials are accessed.
 	public static void initialize() {
 		try {
 			Properties prop = new Properties();

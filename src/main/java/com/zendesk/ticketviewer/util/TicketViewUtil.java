@@ -1,9 +1,7 @@
 package com.zendesk.ticketviewer.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import com.zendesk.ticketviewer.Ticket;
 import com.zendesk.ticketviewer.Tickets;
@@ -11,83 +9,33 @@ import com.zendesk.ticketviewer.Tickets;
 public class TicketViewUtil {
 	private static final List<String> HEADERS = new ArrayList<>();
 	private static final List<Integer> WIDTHS = new ArrayList<>();
+	
+	private static void addKey(StringBuilder sb, String key, Object value) {
+		if(value == null) {
+			return;
+		}
+		sb.append(key)
+		// We append empty spaces to maintain formatting as two columns. One column for keys and other for values. The max 
+		// length is fixed at 20 and key length is subtracted from it. The same is performed for all keys.
+			.append(String.format("%" + (20 - key.length()) + "s", ""))
+			.append(":")
+			.append(value)
+			.append("\n");
+	}
 
 	public static String getFullTicketDetailsPrint(Ticket ticket) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(TicketViewParams.ID)
-			.append(String.format("%" + (20 - TicketViewParams.ID.length()) + "s", ""))
-			.append(":")
-			.append(ticket.getId())
-			.append("\n");
-		
-		sb.append(TicketViewParams.REQUESTER_ID)
-			.append(String.format("%" + (20 - TicketViewParams.REQUESTER_ID.length()) + "s", ""))
-			.append(":")
-			.append(ticket.getRequesterId())
-			.append("\n");
-		if(ticket.getPriority() != null) {
-			sb.append(TicketViewParams.PRIORITY)
-				.append(String.format("%" + (20 - TicketViewParams.PRIORITY.length()) + "s", ""))
-				.append(":")
-				.append(ticket.getPriority())
-				.append("\n");
-		}
-		if(ticket.getSubject() != null) {
-			sb.append(TicketViewParams.SUBJECT)
-				.append(String.format("%" + (20 - TicketViewParams.SUBJECT.length()) + "s", ""))
-				.append(":")
-				.append(ticket.getSubject())
-				.append("\n");
-		}
-		if(ticket.getDescritpion() != null) {
-			sb.append(TicketViewParams.DESCRIPTION)
-				.append(String.format("%" + (20 - TicketViewParams.DESCRIPTION.length()) + "s", ""))
-				.append(":")
-				.append(ticket.getDescritpion())
-				.append("\n");
-		}
-		if(ticket.getCreatedAt() != null) {
-			sb.append(TicketViewParams.CREATED_AT)
-				.append(String.format("%" + (20 - TicketViewParams.CREATED_AT.length()) + "s", ""))
-				.append(":")
-				.append(DateUtil.getHumanReadableDate(ticket.getCreatedAt()))
-				.append("\n");
-		}
-		if(ticket.getUpdatedAt() != null) {
-			sb.append(TicketViewParams.UPDATED_AT)
-				.append(String.format("%" + (20 - TicketViewParams.UPDATED_AT.length()) + "s", ""))
-				.append(":")
-				.append(DateUtil.getHumanReadableDate(ticket.getUpdatedAt()))
-				.append("\n");
-		}
-		if(ticket.getStatus() != null) {
-			sb.append(TicketViewParams.STATUS)
-				.append(String.format("%" + (20 - TicketViewParams.STATUS.length()) + "s", ""))
-				.append(":")
-				.append(ticket.getStatus())
-				.append("\n");
-		}
-		if(ticket.getAssigneeId() != null) {
-			sb.append(TicketViewParams.ASSIGNEE_ID)
-				.append(String.format("%" + (20 - TicketViewParams.ASSIGNEE_ID.length()) + "s", ""))
-				.append(":")
-				.append(ticket.getAssigneeId())
-				.append("\n");
-		}
-		if(ticket.getDueAt() != null) {
-			sb.append(TicketViewParams.DUE_AT)
-				.append(String.format("%" + (20 - TicketViewParams.DUE_AT.length()) + "s", ""))
-				.append(":")
-				.append(DateUtil.getHumanReadableDate(ticket.getDueAt()))
-				.append("\n");
-		}
-		if(ticket.getTags() != null && !ticket.getTags().isEmpty()) {
-			sb.append(TicketViewParams.TAGS)
-				.append(String.format("%" + (20 - TicketViewParams.TAGS.length()) + "s", ""))
-				.append(":")
-				.append(String.join(",", ticket.getTags()))
-				.append("\n");
-		}
+		addKey(sb, TicketViewParams.ID, ticket.getId());
+		addKey(sb, TicketViewParams.REQUESTER_ID, ticket.getRequesterId());
+		addKey(sb, TicketViewParams.PRIORITY, ticket.getPriority());
+		addKey(sb, TicketViewParams.SUBJECT, ticket.getSubject());
+		addKey(sb, TicketViewParams.DESCRIPTION, ticket.getDescritpion());
+		addKey(sb, TicketViewParams.CREATED_AT, DateUtil.getHumanReadableDate(ticket.getCreatedAt()));
+		addKey(sb, TicketViewParams.UPDATED_AT, DateUtil.getHumanReadableDate(ticket.getUpdatedAt()));
+		addKey(sb, TicketViewParams.STATUS, ticket.getStatus());
+		addKey(sb, TicketViewParams.ASSIGNEE_ID, ticket.getAssigneeId());
+		addKey(sb, TicketViewParams.DUE_AT, DateUtil.getHumanReadableDate(ticket.getDueAt()));
+		addKey(sb, TicketViewParams.TAGS, String.join(",", ticket.getTags()));
 		return sb.toString();
 	}
 
@@ -106,9 +54,10 @@ public class TicketViewUtil {
 			rows.add(row);
 		}
 		
-		return tablePrint(HEADERS, WIDTHS, rows);
+		return TableFormatUtil.getTable(HEADERS, WIDTHS, rows);
 	}
 
+	// Headers are initialized only for the first time
 	private static void initializeHeaders() {
 		if(HEADERS.isEmpty()) {
 			HEADERS.add(TicketViewParams.ID);
@@ -133,40 +82,6 @@ public class TicketViewUtil {
 			WIDTHS.add(20);
 		}
 	}
-	
-	private static String tablePrint(List<String> headers, List<Integer> widths, List<List<Object>> rows) {
-		StringBuilder sb = new StringBuilder();
-		
-		addRow(headers, widths, sb);
-		int length = sb.length();
-		sb.append("\n");
-		for(int i = 0; i < length; i++) {
-			sb.append("-");
-		}
-		sb.append("\n");
-		
-		for(List<Object> row : rows) {
-			addRow(row, widths, sb);
-			sb.append("\n");
-		}
-		return sb.toString();
-	}
-
-	private static void addRow(List<? extends Object> headers, List<Integer> widths, StringBuilder sb) {
-		sb.append("| ");
-		for(int i = 0; i < headers.size(); i++) {
-			String header = Objects.toString(headers.get(i), "");
-			String column = header.substring(0, Math.min(header.length(), widths.get(i)));
-			sb.append(column);
-			if(column.length() < widths.get(i)) {
-				int spaceLength = widths.get(i) - column.length();
-				char[] spaceArrs = new char[spaceLength];
-				Arrays.fill(spaceArrs, ' ');
-				sb.append(spaceArrs);
-			}
-			sb.append(" | ");
-		}
-	}
 
 	
 	public static final class TicketViewParams {
@@ -181,5 +96,15 @@ public class TicketViewUtil {
 		public static final String ASSIGNEE_ID = "Assignee Id";
 		public static final String DUE_AT = "Due At";
 		public static final String TAGS = "Tags";
+	}
+
+	// Used to check if a given String is number or not. 
+	public static Long parseIfLong(String numberStr) {
+		try {
+			return Long.parseLong(numberStr);
+		}
+		catch(Exception e) {
+			return null;
+		}
 	}
 }

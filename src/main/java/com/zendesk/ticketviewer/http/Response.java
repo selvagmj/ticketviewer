@@ -1,5 +1,6 @@
 package com.zendesk.ticketviewer.http;
 
+// Wrapper for HTTP Response. Mainly used so that we can close the CloseableHttpResponse as the function gets over. 
 public class Response {
 
 	private int httpStatusCode;
