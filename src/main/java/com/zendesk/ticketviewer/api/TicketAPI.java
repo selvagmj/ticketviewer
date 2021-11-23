@@ -28,9 +28,8 @@ public class TicketAPI {
 		ticketHttpClient.addQueryParams("per_page", Objects.toString(pageSize));
 		ticketHttpClient.addQueryParams("page", Objects.toString(page));
 		Response response = ticketHttpClient.get();
-		String response2 = response.getResponse();
-		JSONObject responseJSON = new JSONObject(response2);
-		System.out.println(responseJSON);
+		String responseStr = response.getResponse();
+		JSONObject responseJSON = new JSONObject(responseStr);
 		JSONArray ticketsJSONArray = responseJSON.getJSONArray("tickets");
 		List<Ticket> tickets = new ArrayList<>();
 		for(int i = 0; i < ticketsJSONArray.length(); i++) {

@@ -1,21 +1,19 @@
 package com.zendesk.ticketviewer;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
-import com.zendesk.ticketviewer.Ticket.TicketParams;
 import com.zendesk.ticketviewer.api.TicketAPI;
+import com.zendesk.ticketviewer.config.Config;
+import com.zendesk.ticketviewer.util.TicketViewUtil;
 
 public class Service {
 
 	public static void main(String[] args) throws URISyntaxException {
-		System.out.println("Welcome to Zendesk ticket viewer");
-		int num = 0;
 		Scanner scans = new Scanner(System.in);
+		System.out.println("Welcome to Zendesk ticket viewer");
+		Config.initialize();
+		int num = 0;
 		while(num != 3) {
 			System.out.println("Enter 1 to view your tickets");
 			System.out.println("Enter 2 to view ticket by ticket id");
@@ -55,7 +53,7 @@ public class Service {
 				System.out.println("You have reached the end of the list");
 				return;
 			}
-			String ticketsPrint = getTicketsPrint(tickets);
+			String ticketsPrint = TicketViewUtil.getTicketsPrint(tickets);
 			System.out.println(ticketsPrint);
 			System.out.println("Current page: " + page);
 			if(tickets.isPrevious()) {
@@ -92,87 +90,7 @@ public class Service {
 			return;
 		}
 		
-		String ticketPrint = getFullTicketDetailsPrint(ticket);
+		String ticketPrint = TicketViewUtil.getFullTicketDetailsPrint(ticket);
 		System.out.println(ticketPrint);
-	}
-
-	private static String getFullTicketDetailsPrint(Ticket ticket) {
-		
-		return ticket.toString();
-	}
-
-	private static String getTicketsPrint(Tickets tickets) {
-		List<String> headers = new ArrayList<>();
-		List<Integer> widths = new ArrayList<>();
-		
-		headers.add(TicketParams.ID);
-		widths.add(10);
-		
-		headers.add(TicketParams.PRIORITY);
-		widths.add(10);
-		
-		headers.add(TicketParams.SUBJECT);
-		widths.add(50);
-		
-		headers.add(TicketParams.REQUESTER_ID);
-		widths.add(20);
-		
-		headers.add(TicketParams.UPDATED_AT);
-		widths.add(20);
-		
-		headers.add(TicketParams.STATUS);
-		widths.add(10);
-		
-		headers.add(TicketParams.ASSIGNEE_ID);
-		widths.add(20);
-		
-		List<List<Object>> rows = new ArrayList<>();
-		for(Ticket ticket : tickets.getTickets()) {
-			List<Object> row = new ArrayList<>();
-			row.add(ticket.getId());
-			row.add(ticket.getPriority());
-			row.add(ticket.getSubject());
-			row.add(ticket.getRequesterId());
-			row.add(ticket.getUpdatedAt());
-			row.add(ticket.getStatus());
-			row.add(ticket.getAssigneeId());
-			rows.add(row);
-		}
-		
-		return tablePrint(headers, widths, rows);
-	}
-	
-	private static String tablePrint(List<String> headers, List<Integer> widths, List<List<Object>> rows) {
-		StringBuilder sb = new StringBuilder();
-		
-		addRow(headers, widths, sb);
-		int length = sb.length();
-		sb.append("\n");
-		for(int i = 0; i < length; i++) {
-			sb.append("-");
-		}
-		sb.append("\n");
-		
-		for(List<Object> row : rows) {
-			addRow(row, widths, sb);
-			sb.append("\n");
-		}
-		return sb.toString();
-	}
-
-	private static void addRow(List<? extends Object> headers, List<Integer> widths, StringBuilder sb) {
-		sb.append("| ");
-		for(int i = 0; i < headers.size(); i++) {
-			String header = Objects.toString(headers.get(i), "");
-			String column = header.substring(0, Math.min(header.length(), widths.get(i)));
-			sb.append(column);
-			if(column.length() < widths.get(i)) {
-				int spaceLength = widths.get(i) - column.length();
-				char[] spaceArrs = new char[spaceLength];
-				Arrays.fill(spaceArrs, ' ');
-				sb.append(spaceArrs);
-			}
-			sb.append(" | ");
-		}
 	}
 }
