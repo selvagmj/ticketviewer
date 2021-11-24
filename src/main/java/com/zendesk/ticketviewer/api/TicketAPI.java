@@ -28,21 +28,27 @@ public class TicketAPI {
 		ticketHttpClient.addQueryParams("per_page", Objects.toString(pageSize));
 		ticketHttpClient.addQueryParams("page", Objects.toString(page));
 		Response response = ticketHttpClient.get();
-		
+		return getTickets(response);
+	}
+
+	public static Tickets getTickets(Response response) {
 		// Have added the same error message for all error response codes. But in actual implementation
 		// we have to find the corresponding error for every error code and send corresponding error message to client.
-		if(response == null ||
-				response.getHttpStatusCode() != 200 ||
-				response.getResponse() == null) {
-			LOGGER.log(Level.WARNING, "Cannot retrieve ticket details for given params");
+		if(response == null || response.getResponse() == null) {
+			LOGGER.log(Level.WARNING, "Cannot retrieve ticket details for given params.");
+			return null;
+		}
+		
+		if(response.getHttpStatusCode() != 200) {
+			LOGGER.log(Level.WARNING, "Cannot retrieve ticket details for given params. Status code: " + response.getHttpStatusCode());
+			JSONObject errorJSON = new JSONObject(response.getResponse());
+			if(errorJSON.has("error")) {
+				LOGGER.log(Level.WARNING, "Error: " + errorJSON.get("error"));
+			}
 			return null;
 		}
 		
 		JSONObject responseJSON = new JSONObject(response.getResponse());
-		if(responseJSON.has("error")) {
-			LOGGER.log(Level.WARNING, "Cannot retrieve ticket details for given params");
-			return null;
-		}
 		JSONArray ticketsJSONArray = responseJSON.getJSONArray("tickets");
 		List<Ticket> tickets = new ArrayList<>();
 		for(int i = 0; i < ticketsJSONArray.length(); i++) {
@@ -85,27 +91,32 @@ public class TicketAPI {
 		TicketHttpClient ticketHttpClient = new TicketHttpClient();
 		ticketHttpClient.addPath(ticketId);
 		Response response = ticketHttpClient.get();
+		return getTicket(response);
+	}
 
+	public static Ticket getTicket(Response response) {
 		// Have added the same error message for all error response codes. But in actual implementation
 		// we have to find the corresponding error for every error code and send corresponding error message to client.
-		if(response == null ||
-				response.getResponse() == null) {
+		if(response == null || response.getResponse() == null) {
 			LOGGER.log(Level.WARNING, "Cannot retrieve ticket details for given params");
+			return null;
+		}
+		if(response.getHttpStatusCode() != 200) {
+			LOGGER.log(Level.WARNING, "Cannot retrieve ticket details for given params. Status code: " + response.getHttpStatusCode());
+			JSONObject  errorJSON = new JSONObject(response.getResponse());
+			if(errorJSON.has("error")) {
+				String error = errorJSON.getString("error");
+				if(error.equals("RecordNotFound")) {
+					LOGGER.log(Level.WARNING, "Error: Invalid Ticket Id given");
+				}
+				else {
+					LOGGER.log(Level.WARNING, "Error: " + errorJSON.get("error"));
+				}
+			}
 			return null;
 		}
 		
 		JSONObject responseJSON = new JSONObject(response.getResponse());
-		if(responseJSON.has("error")) {
-			String error = responseJSON.getString("error");
-			if(error.equals("RecordNotFound")) {
-				LOGGER.log(Level.WARNING, "Invalid Ticket Id given");
-				return null;
-			}
-		}
-		if(response.getHttpStatusCode() != 200) {
-			LOGGER.log(Level.WARNING, "Cannot retrieve ticket details for given params");
-			return null;
-		}
 		return Ticket.parse(responseJSON.getJSONObject("ticket"));
 	}
 	

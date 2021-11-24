@@ -71,7 +71,11 @@ public class TicketTest
     			+ "}";
     	JSONObject ticketJSON = new JSONObject(ticketStr);
     	Ticket ticket = Ticket.parse(ticketJSON);
-    	assertEquals(12L, ticket.getId());
+    	testTicketEquality(ticket);
+    }
+
+	private void testTicketEquality(Ticket ticket) {
+		assertEquals(12L, ticket.getId());
     	assertEquals(1909816943725L, ticket.getRequesterId());
     	ZonedDateTime createdAt = ZonedDateTime.of(2021, 11, 19, 23, 2, 39, 0, ZoneId.of("Z"));
     	assertTrue(createdAt.compareTo(ticket.getCreatedAt()) == 0);
@@ -88,6 +92,6 @@ public class TicketTest
     	for(int i = 0; i < ticket.getTags().size(); i++) {
     		assertEquals(tags.get(i), ticket.getTags().get(i));
     	}
-    }
+	}
     
 }
