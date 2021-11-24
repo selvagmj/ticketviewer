@@ -93,7 +93,7 @@ public class TicketHttpClient {
 	}
 
 	private void setAuthentication(HttpRequestBase httpGet) throws UnsupportedEncodingException {
-		byte[] bytes = (Config.getUsername() + ":" + Config.getPassword()).getBytes("UTF-8");
+		byte[] bytes = (Config.getUsername() + "/token:" + Config.getAPIToken()).getBytes("UTF-8");
 		String encoding = Base64.getEncoder().encodeToString(bytes);
 		httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + encoding);
 	}

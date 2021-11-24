@@ -14,10 +14,10 @@ public class ServiceHelper {
 	
 	private static final String LOGGING = "logging";
 	private static final String USERNAME = "username";
-	private static final String PASSWORD = "password";
+	private static final String API_TOKEN = "apitoken";
 	private static final String DOMAIN = "domain";
 	
-	private static final Set<String> CMD_PARAMETERS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(LOGGING, USERNAME, PASSWORD, DOMAIN)));
+	private static final Set<String> CMD_PARAMETERS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(LOGGING, USERNAME, API_TOKEN, DOMAIN)));
 
 	public static void setCommandParameters(String[] args) {
 		Map<String, String> cmdParameters = getCommandParameters(args);
@@ -27,14 +27,14 @@ public class ServiceHelper {
 			LogManager.getLogManager().reset();
 		}
 		
-		// Set the username, password and domain of the account that has to be accessed. If not set data is retireved from
+		// Set the username, apitoken and domain of the account that has to be accessed. If not set data is retireved from
 		// credentials.properties file
 		if(cmdParameters.containsKey(USERNAME)) { 
 			Config.setUsername(cmdParameters.get(USERNAME));
 		}
 		
-		if(cmdParameters.containsKey(PASSWORD)) { 
-			Config.setPassword(cmdParameters.get(PASSWORD));
+		if(cmdParameters.containsKey(API_TOKEN)) { 
+			Config.setAPIToken(cmdParameters.get(API_TOKEN));
 		}
 		
 		if(cmdParameters.containsKey(DOMAIN)) { 

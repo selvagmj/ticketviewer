@@ -24,7 +24,7 @@ public class Config {
 			// Used Put if absent to avoid replacing credentials given in command line while invoking jar 
 			PROPS.putIfAbsent("domain", prop.getProperty("domain"));
 			PROPS.putIfAbsent("username", prop.getProperty("username"));
-			PROPS.putIfAbsent("password", prop.getProperty("password"));
+			PROPS.putIfAbsent("apitoken", prop.getProperty("apitoken"));
 		}
 		catch(Exception e) {
 			LOGGER.log(Level.SEVERE, "Cannot read credentials properties", e);
@@ -39,8 +39,8 @@ public class Config {
 		PROPS.putIfAbsent("username", username);
 	}
 	
-	public static void setPassword(String password) {
-		PROPS.putIfAbsent("password", password);
+	public static void setAPIToken(String apitoken) {
+		PROPS.putIfAbsent("apitoken", apitoken);
 	}
 
 	public static String getDomain() {
@@ -51,8 +51,8 @@ public class Config {
 		return PROPS.get("username");
 	}
 	
-	public static String getPassword() {
-		return PROPS.get("password");
+	public static String getAPIToken() {
+		return PROPS.get("apitoken");
 	}
 	
 }

@@ -8,11 +8,11 @@ public class ConfigTest {
 
 	@Test
 	public void configTest() {
-		Config.setPassword("password");
+		Config.setAPIToken("apitoken");
 		Config.setUsername("username");
 		Config.setDomain("https://www.zendesk.com");
 
-		assertEquals("password", Config.getPassword());
+		assertEquals("apitoken", Config.getAPIToken());
 		assertEquals("username", Config.getUsername());
 		assertEquals("https://www.zendesk.com", Config.getDomain());
 		

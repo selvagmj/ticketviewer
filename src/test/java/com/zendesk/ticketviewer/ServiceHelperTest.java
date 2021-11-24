@@ -10,10 +10,10 @@ public class ServiceHelperTest {
 	
 	@Test
 	public void setCommandParameters() {
-		String[] args = new String[] {"username=un", "password=pw", "domain=dm"};
+		String[] args = new String[] {"username=un", "apitoken=apit", "domain=dm"};
 		ServiceHelper.setCommandParameters(args);
 		
-		assertEquals("pw", Config.getPassword());
+		assertEquals("apit", Config.getAPIToken());
 		assertEquals("un", Config.getUsername());
 		assertEquals("dm", Config.getDomain());
 	}
