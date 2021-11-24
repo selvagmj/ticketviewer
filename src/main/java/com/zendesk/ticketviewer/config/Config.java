@@ -30,8 +30,20 @@ public class Config {
 			LOGGER.log(Level.SEVERE, "Cannot read credentials properties", e);
 		}
 	}
+	
+	public static void setDomain(String domain) {
+		PROPS.putIfAbsent("domain", domain);
+	}
+	
+	public static void setUsername(String username) {
+		PROPS.putIfAbsent("username", username);
+	}
+	
+	public static void setPassword(String password) {
+		PROPS.putIfAbsent("password", password);
+	}
 
-	public static String getSource() {
+	public static String getDomain() {
 		return PROPS.get("domain");
 	}
 	

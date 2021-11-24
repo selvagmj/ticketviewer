@@ -12,6 +12,9 @@ public class DateUtil {
 
 	// Converts String date in ISO 8601 format to ZonedDateTime object 
 	public static ZonedDateTime getDate(String dateStr) {
+		if(dateStr == null) {
+			return null;
+		}
 		TemporalAccessor accessor = DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(dateStr);
 		return ZonedDateTime.from(accessor);
 	}

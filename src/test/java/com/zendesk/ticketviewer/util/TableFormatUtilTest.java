@@ -5,8 +5,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Test;
+
 public class TableFormatUtilTest {
 
+	@Test
 	public void getTableTest() {
 		List<String> headers = new ArrayList<>();
 		headers.add("id");
@@ -31,5 +34,6 @@ public class TableFormatUtilTest {
 				+ "| 2     | swanson              | \n"
 				+ "";
 		assertEquals(tempTable, table);
+		assertEquals(null, TableFormatUtil.getTable(headers, null, rows));
 	}
 }

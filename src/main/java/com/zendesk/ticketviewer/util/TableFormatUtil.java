@@ -16,6 +16,9 @@ public class TableFormatUtil {
 	// rows - rows of data
 	// the length of headers, widths and every element of rows has to be same.
 	public static String getTable(List<String> headers, List<Integer> widths, List<List<Object>> rows) {
+		if(headers == null || widths == null || rows == null) {
+			return null;
+		}
 		StringBuilder sb = new StringBuilder();
 		
 		addRow(headers, widths, sb);

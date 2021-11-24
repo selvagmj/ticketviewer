@@ -67,6 +67,7 @@ public class TicketViewUtilTest {
 				+ "Tags                :zendesk,ticket\n"
 				+ "";
 		assertEquals(tempFullTicketDetailsPrint, fullTicketDetailsPrint);
+		assertEquals(null, TicketViewUtil.getFullTicketDetailsPrint(null));
 	}
 	
 	@Test
@@ -137,6 +138,7 @@ public class TicketViewUtilTest {
 				+ "| 2          |            | new second ticket                                  | 12                   | Sat, Nov 19, 2011, 22:16:40         | open       |                      | \n"
 				+ "";
 		assertEquals(tempTicketsPrint, ticketsPrint);
+		assertEquals(null, TicketViewUtil.getTicketsPrint(null));
 	}
 	
 	

@@ -24,6 +24,9 @@ public class TicketViewUtil {
 	}
 
 	public static String getFullTicketDetailsPrint(Ticket ticket) {
+		if(ticket == null) {
+			return null;
+		}
 		StringBuilder sb = new StringBuilder();
 		addKey(sb, TicketViewParams.ID, ticket.getId());
 		addKey(sb, TicketViewParams.REQUESTER_ID, ticket.getRequesterId());
@@ -40,6 +43,9 @@ public class TicketViewUtil {
 	}
 
 	public static String getTicketsPrint(Tickets tickets) {
+		if(tickets == null || tickets.getTickets() == null) {
+			return null;
+		}
 		initializeHeaders();
 		List<List<Object>> rows = new ArrayList<>();
 		for(Ticket ticket : tickets.getTickets()) {

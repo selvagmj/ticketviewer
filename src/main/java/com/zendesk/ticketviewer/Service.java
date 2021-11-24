@@ -1,7 +1,6 @@
 package com.zendesk.ticketviewer;
 
 import java.util.Scanner;
-import java.util.logging.LogManager;
 
 import com.zendesk.ticketviewer.api.TicketAPI;
 import com.zendesk.ticketviewer.config.Config;
@@ -21,10 +20,7 @@ public class Service {
 	private static final String PREVIOUS = "previous";
 
 	public static void main(String[] args) {
-		// Users can enable logging by using -l option
-		if(args == null || args.length != 1 || !args[0].equals("-l")) { 
-			LogManager.getLogManager().reset();
-		}
+		ServiceHelper.setCommandParameters(args);
 		Scanner scans = new Scanner(System.in);
 		System.out.println("Welcome to Zendesk ticket viewer");
 		Config.initialize();

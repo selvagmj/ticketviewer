@@ -37,7 +37,7 @@ public class TicketHttpClient {
 	private Map<String, String> headers = new HashMap<>();
 	
 	public TicketHttpClient() {
-		this.url = Config.getSource() + SEPARATOR + TICKETS_API_PATH;
+		this.url = Config.getDomain() + SEPARATOR + TICKETS_API_PATH;
 		this.headers.put("Accept", "application/json");
 	}
 	
