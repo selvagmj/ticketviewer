@@ -41,10 +41,6 @@ public class TicketHttpClient {
 		this.headers.put("Accept", "application/json");
 	}
 	
-	public void setPath(String path) {
-		this.url = path;
-	}
-	
 	public void addQueryParams(String key, String value) {
 		this.queryParam.put(key, value);
 	}

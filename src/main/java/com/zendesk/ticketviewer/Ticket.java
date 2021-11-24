@@ -51,7 +51,7 @@ public class Ticket {
 		return this.subject;
 	}
 	
-	public String getDescritpion() {
+	public String getDescription() {
 		return this.description;
 	}
 
@@ -143,23 +143,23 @@ public class Ticket {
 		return ticketBuilder.build();
 	}
 	
-	public static final class TicketParams {
-		public static final String CREATED_AT = "created_at";
-		public static final String STATUS = "status";
-		public static final String SUBJECT = "subject";
-		public static final String DESCRIPTION = "description";
-		public static final String UPDATED_AT = "updated_at";
-		public static final String ID = "id";
-		public static final String REQUESTER_ID = "requester_id";
-		public static final String PRIORITY = "priority";
-		public static final String ASSIGNEE_ID = "assignee_id";
-		public static final String DUE_AT = "due_at";
-		public static final String TAGS = "tags";
+	private static final class TicketParams {
+		private static final String CREATED_AT = "created_at";
+		private static final String STATUS = "status";
+		private static final String SUBJECT = "subject";
+		private static final String DESCRIPTION = "description";
+		private static final String UPDATED_AT = "updated_at";
+		private static final String ID = "id";
+		private static final String REQUESTER_ID = "requester_id";
+		private static final String PRIORITY = "priority";
+		private static final String ASSIGNEE_ID = "assignee_id";
+		private static final String DUE_AT = "due_at";
+		private static final String TAGS = "tags";
 	}
 	
 	// Used Builder since actual tickets object will have a large number of parameters many of which will
 	// require validation before setting them.
-	private static class TicketBuilder {
+	public static class TicketBuilder {
 		private ZonedDateTime createdAt;
 		private TicketStatus ticketStatus;
 		private String subject;
@@ -212,7 +212,7 @@ public class Ticket {
 			return this;
 		}
 		
-		public TicketBuilder setAssigneeId(long assigneeId) {
+		public TicketBuilder setAssigneeId(Long assigneeId) {
 			this.assigneeId = assigneeId;
 			return this;
 		}

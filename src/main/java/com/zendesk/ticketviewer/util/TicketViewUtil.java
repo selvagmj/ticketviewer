@@ -29,7 +29,7 @@ public class TicketViewUtil {
 		addKey(sb, TicketViewParams.REQUESTER_ID, ticket.getRequesterId());
 		addKey(sb, TicketViewParams.PRIORITY, ticket.getPriority());
 		addKey(sb, TicketViewParams.SUBJECT, ticket.getSubject());
-		addKey(sb, TicketViewParams.DESCRIPTION, ticket.getDescritpion());
+		addKey(sb, TicketViewParams.DESCRIPTION, ticket.getDescription());
 		addKey(sb, TicketViewParams.CREATED_AT, DateUtil.getHumanReadableDate(ticket.getCreatedAt()));
 		addKey(sb, TicketViewParams.UPDATED_AT, DateUtil.getHumanReadableDate(ticket.getUpdatedAt()));
 		addKey(sb, TicketViewParams.STATUS, ticket.getStatus());
@@ -84,18 +84,18 @@ public class TicketViewUtil {
 	}
 
 	
-	public static final class TicketViewParams {
-		public static final String CREATED_AT = "Created At";
-		public static final String STATUS = "Status";
-		public static final String SUBJECT = "Subject";
-		public static final String DESCRIPTION = "Description";
-		public static final String UPDATED_AT = "Updated At";
-		public static final String ID = "Id";
-		public static final String REQUESTER_ID = "Requester Id";
-		public static final String PRIORITY = "Priority";
-		public static final String ASSIGNEE_ID = "Assignee Id";
-		public static final String DUE_AT = "Due At";
-		public static final String TAGS = "Tags";
+	private static final class TicketViewParams {
+		private static final String CREATED_AT = "Created At";
+		private static final String STATUS = "Status";
+		private static final String SUBJECT = "Subject";
+		private static final String DESCRIPTION = "Description";
+		private static final String UPDATED_AT = "Updated At";
+		private static final String ID = "Id";
+		private static final String REQUESTER_ID = "Requester Id";
+		private static final String PRIORITY = "Priority";
+		private static final String ASSIGNEE_ID = "Assignee Id";
+		private static final String DUE_AT = "Due At";
+		private static final String TAGS = "Tags";
 	}
 
 	// Used to check if a given String is number or not. 
