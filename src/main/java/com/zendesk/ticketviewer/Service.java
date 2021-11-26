@@ -1,5 +1,6 @@
 package com.zendesk.ticketviewer;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,31 +25,36 @@ public class Service {
 	private static final String PREVIOUS = "previous";
 
 	public static void main(String[] args) {
-		ServiceHelper.setCommandParameters(args);
-		Scanner scans = new Scanner(System.in);
-		System.out.println("Welcome to Zendesk ticket viewer");
-		Config.initialize();
-		int num = 0;
-		while(num != EXIT) {
-			System.out.println("Enter " + GET_TICKETS + " to view your tickets");
-			System.out.println("Enter " + GET_TICKET + " to view ticket by ticket id");
-			System.out.println("Enter " + EXIT + " to exit");
-			
-			num = scans.nextInt();
-			if(num == EXIT) {
-				break;
+			ServiceHelper.setCommandParameters(args);
+			System.out.println("Welcome to Zendesk ticket viewer");
+			Config.initialize();
+			int num = 0;
+			Scanner scans = new Scanner(System.in);
+			try {
+				while(num != EXIT) {
+					System.out.println("Enter " + GET_TICKETS + " to view your tickets");
+					System.out.println("Enter " + GET_TICKET + " to view ticket by ticket id");
+					System.out.println("Enter " + EXIT + " to exit");
+					
+					num = scans.nextInt();
+					if(num == EXIT) {
+						break;
+					}
+					else if(num == GET_TICKET) {
+						getTicketDetail(scans);
+					}
+					else if(num == GET_TICKETS) {
+						getTickets(scans);
+					}
+					else {
+						System.out.println("Invalid operation. Use the following operations only.");
+					}
+				}
 			}
-			else if(num == GET_TICKET) {
-				getTicketDetail(scans);
+			catch(InputMismatchException e) {
+				System.out.println("Invalid operation specified");
 			}
-			else if(num == GET_TICKETS) {
-				getTickets(scans);
-			}
-			else {
-				System.out.println("Invalid operation. Use the following operations only.");
-			}
-		}
-		System.out.println("Thank you!");
+			System.out.println("Thank you!");
 	}
 
 	private static void getTickets(Scanner scans) {

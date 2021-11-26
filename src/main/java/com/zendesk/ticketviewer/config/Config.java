@@ -1,6 +1,6 @@
 package com.zendesk.ticketviewer.config;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -19,7 +19,7 @@ public class Config {
 	public static void initialize() {
 		try {
 			Properties prop = new Properties();
-			FileInputStream propsFile = new FileInputStream("src/main/resources/credentials.properties");
+			InputStream propsFile = Thread.currentThread().getContextClassLoader().getResourceAsStream("credentials.properties");
 			prop.load(propsFile);
 			// Used Put if absent to avoid replacing credentials given in command line while invoking jar 
 			PROPS.putIfAbsent("domain", prop.getProperty("domain"));
