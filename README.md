@@ -6,7 +6,7 @@ This application provides you with a simple command line interface to query zend
 2. There are 2 ways to use the application
 
     a. **Use the Executable Jar:**
-    1. Download the [ticketviewer-jar-with-dependencies.jar](https://github.com/selvagmj/ticketviewer/raw/main/target/ticketviewer-0.0.1-jar-with-dependencies.jar)
+    1. Download the [ticketviewer-0.0.1-jar-with-dependencies.jar](https://github.com/selvagmj/ticketviewer/raw/main/target/ticketviewer-0.0.1-jar-with-dependencies.jar)
     2. java -jar ticketviewer-jar-with-dependencies.jar domain=https://{account name}.zendesk.com username={user email} apitoken={api token generated in first step}
     
     You can also enable logging by adding the option logging=true. Logging disabled by default.
