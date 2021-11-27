@@ -27,7 +27,7 @@ After starting the application you can press **1** to access your tickets.
     
 The fields displayed are Id, Priority, Subject, Requester Id, Updated At, Status and Assignee Id. When a field is empty it is indicated by empty space.
     
-The first 25 tickets will be displayed in the first page. If there are more tickets available to see you can go to next page by typing next. **"next"** option will only be available in command line if more tickets are available. Likewise if you want to go to previous page you can type **"previous"**. "previous" option is available only when previous tickets are available. 
+The first 25 tickets will be displayed in the first page. If there are more tickets available to see you can go to next page by typing **next**. "next" option will only be available in command line if more tickets are available. Likewise if you want to go to previous page you can type **"previous"**. "previous" option is available only when previous tickets are available. 
     
 **2. View ticket by ticket Id**
 
@@ -37,3 +37,5 @@ The fields displayed in individual tickets are ticket Id, Requester Id, Subject,
 
 
 You can return to main menu anytime by entering **"main"**. Whenever you enter an invalid operation you will be pushed back to main menu. When you enter an invalid operation in main menu the application will quit.
+
+Press 3 to quit application
