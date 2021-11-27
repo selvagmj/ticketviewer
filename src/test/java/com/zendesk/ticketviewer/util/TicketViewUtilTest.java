@@ -58,11 +58,13 @@ public class TicketViewUtilTest {
 		
 		String tempFullTicketDetailsPrint = "Id                  :1234\n"
 				+ "Requester Id        :12\n"
+				+ "Priority            :\n"
 				+ "Subject             :new ticket\n"
 				+ "Description         :found an issue!\n"
 				+ "Created At          :Thu, Nov 19, 2020, 22:16:40\n"
 				+ "Updated At          :Fri, Nov 19, 2021, 22:16:40\n"
 				+ "Status              :closed\n"
+				+ "Assignee Id         :\n"
 				+ "Due At              :Sun, Dec 19, 2021, 22:16:40\n"
 				+ "Tags                :zendesk,ticket\n"
 				+ "";
