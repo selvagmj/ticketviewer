@@ -11,8 +11,11 @@ public class TicketViewUtil {
 	private static final List<Integer> WIDTHS = new ArrayList<>();
 	
 	private static void addKey(StringBuilder sb, String key, Object value) {
-		if(value == null) {
+		if(key == null) {
 			return;
+		}
+		if(value == null) {
+			value = "";
 		}
 		sb.append(key)
 		// We append empty spaces to maintain formatting as two columns. One column for keys and other for values. The max 
