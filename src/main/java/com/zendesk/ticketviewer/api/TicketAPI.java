@@ -18,6 +18,7 @@ import com.zendesk.ticketviewer.Ticket;
 import com.zendesk.ticketviewer.Tickets;
 import com.zendesk.ticketviewer.http.Response;
 import com.zendesk.ticketviewer.http.TicketHttpClient;
+import com.zendesk.ticketviewer.util.TicketViewUtil;
 
 public class TicketAPI {
 
@@ -41,8 +42,8 @@ public class TicketAPI {
 		
 		if(response.getHttpStatusCode() != 200) {
 			LOGGER.log(Level.WARNING, "Cannot retrieve ticket details for given params. Status code: " + response.getHttpStatusCode());
-			JSONObject errorJSON = new JSONObject(response.getResponse());
-			if(errorJSON.has("error")) {
+			JSONObject errorJSON = TicketViewUtil.parseIfJSON(response.getResponse());
+			if(errorJSON != null && errorJSON.has("error")) {
 				LOGGER.log(Level.WARNING, "Error: " + errorJSON.get("error"));
 			}
 			return null;
@@ -103,8 +104,8 @@ public class TicketAPI {
 		}
 		if(response.getHttpStatusCode() != 200) {
 			LOGGER.log(Level.WARNING, "Cannot retrieve ticket details for given params. Status code: " + response.getHttpStatusCode());
-			JSONObject  errorJSON = new JSONObject(response.getResponse());
-			if(errorJSON.has("error")) {
+			JSONObject  errorJSON = TicketViewUtil.parseIfJSON(response.getResponse());
+			if(errorJSON != null && errorJSON.has("error")) {
 				String error = errorJSON.getString("error");
 				if(error.equals("RecordNotFound")) {
 					LOGGER.log(Level.WARNING, "Error: Invalid Ticket Id given");

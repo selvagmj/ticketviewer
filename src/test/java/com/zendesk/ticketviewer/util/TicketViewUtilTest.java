@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.junit.Test;
 
 import com.zendesk.ticketviewer.Ticket;
@@ -24,6 +25,15 @@ public class TicketViewUtilTest {
 		Long expected = 55L;
 		assertEquals(null, TicketViewUtil.parseIfLong(str));
 		assertEquals(expected, TicketViewUtil.parseIfLong(numStr));
+	}
+
+	@Test
+	public void parseIfJSONTest() {
+		String str = "{\"id\":12}";
+		assertEquals(new JSONObject(str).toString(), TicketViewUtil.parseIfJSON(str).toString());
+		assertEquals(null, TicketViewUtil.parseIfJSON("sdd"));
+		assertEquals(null, TicketViewUtil.parseIfJSON(""));
+		assertEquals(null, TicketViewUtil.parseIfJSON(null));
 	}
 	
 	@Test

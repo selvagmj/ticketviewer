@@ -3,6 +3,8 @@ package com.zendesk.ticketviewer.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.zendesk.ticketviewer.Ticket;
 import com.zendesk.ticketviewer.Tickets;
 
@@ -111,6 +113,16 @@ public class TicketViewUtil {
 	public static Long parseIfLong(String numberStr) {
 		try {
 			return Long.parseLong(numberStr);
+		}
+		catch(Exception e) {
+			return null;
+		}
+	}
+	
+	// Used to check if a given String is number or not.
+	public static JSONObject parseIfJSON(String json) {
+		try {
+			return new JSONObject(json);
 		}
 		catch(Exception e) {
 			return null;
