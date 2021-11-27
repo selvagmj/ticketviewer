@@ -25,6 +25,7 @@ public class Service {
 	private static final String PREVIOUS = "previous";
 
 	public static void main(String[] args) {
+		try {
 			ServiceHelper.setCommandParameters(args);
 			System.out.println("Welcome to Zendesk ticket viewer");
 			Config.initialize();
@@ -55,6 +56,11 @@ public class Service {
 				System.out.println("Invalid operation specified");
 			}
 			System.out.println("Thank you!");
+		}
+		catch(Exception e) {
+			LOGGER.log(Level.SEVERE, "Exception while starting application", e);
+			System.out.println("Sorry, Some error occuered in our side. Cannot start Application");
+		}
 	}
 
 	private static void getTickets(Scanner scans) {
@@ -97,9 +103,13 @@ public class Service {
 				
 				operation = scans.next();
 				// User cannot enter "next" or "previous" when next or previous set of tickets are not available
-				if((!tickets.isNext() && operation.equals(NEXT)) ||
-						(!tickets.isPrevious() && operation.equals(PREVIOUS))) {
-					System.out.println("Invalid operation.");
+				if(!tickets.isNext() && operation.equals(NEXT)) {
+					System.out.println("Invalid operation. No next tickets found.");
+					return;
+				}
+				
+				if(!tickets.isPrevious() && operation.equals(PREVIOUS)) {
+					System.out.println("Invalid operation. No previous tickets found.");
 					return;
 				}
 			}

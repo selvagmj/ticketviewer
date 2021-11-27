@@ -61,11 +61,11 @@ public class TicketViewUtilTest {
 				+ "Priority            :\n"
 				+ "Subject             :new ticket\n"
 				+ "Description         :found an issue!\n"
-				+ "Created At          :Thu, Nov 19, 2020, 22:16:40\n"
-				+ "Updated At          :Fri, Nov 19, 2021, 22:16:40\n"
+				+ "Created At          :Thu, Nov 19, 2020, 22:16:40 Z\n"
+				+ "Updated At          :Fri, Nov 19, 2021, 22:16:40 Z\n"
 				+ "Status              :closed\n"
 				+ "Assignee Id         :\n"
-				+ "Due At              :Sun, Dec 19, 2021, 22:16:40\n"
+				+ "Due At              :Sun, Dec 19, 2021, 22:16:40 Z\n"
 				+ "Tags                :zendesk,ticket\n"
 				+ "";
 		assertEquals(tempFullTicketDetailsPrint, fullTicketDetailsPrint);
@@ -136,8 +136,8 @@ public class TicketViewUtilTest {
 
 		String tempTicketsPrint = "| Id         | Priority   | Subject                                            | Requester Id         | Updated At                          | Status     | Assignee Id          | \n"
 				+ "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
-				+ "| 1          |            | new ticket                                         | 12                   | Fri, Nov 19, 2021, 22:16:40         | closed     |                      | \n"
-				+ "| 2          |            | new second ticket                                  | 12                   | Sat, Nov 19, 2011, 22:16:40         | open       |                      | \n"
+				+ "| 1          |            | new ticket                                         | 12                   | Fri, Nov 19, 2021, 22:16:40 Z       | closed     |                      | \n"
+				+ "| 2          |            | new second ticket                                  | 12                   | Sat, Nov 19, 2011, 22:16:40 Z       | open       |                      | \n"
 				+ "";
 		assertEquals(tempTicketsPrint, ticketsPrint);
 		assertEquals(null, TicketViewUtil.getTicketsPrint(null));

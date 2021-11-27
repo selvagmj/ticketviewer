@@ -23,7 +23,7 @@ public class DateUtilTest {
 	public void getHumanReadableDateTest() {
 		ZonedDateTime tempZonedDateTime = ZonedDateTime.of(2020, 11, 19, 22, 16, 40, 0, ZoneId.of("Z"));
 		String humanReadableDate = DateUtil.getHumanReadableDate(tempZonedDateTime);
-		assertEquals("Thu, Nov 19, 2020, 22:16:40", humanReadableDate);
+		assertEquals("Thu, Nov 19, 2020, 22:16:40 Z", humanReadableDate);
 		assertEquals(null, DateUtil.getHumanReadableDate(null));
 	}
 	

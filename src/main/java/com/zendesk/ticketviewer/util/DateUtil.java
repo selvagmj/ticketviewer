@@ -7,7 +7,7 @@ import java.time.temporal.TemporalAccessor;
 public class DateUtil {
 	
 	// Human readable date format e.g. Fri, Nov 19, 2021, 22:16:40
-	private static final String READABLE_DATE_FORMAT = "E, MMM dd, uuuu, HH:mm:ss";
+	private static final String READABLE_DATE_FORMAT = "E, MMM dd, uuuu, HH:mm:ss zzzz";
 	private static final DateTimeFormatter READABLE_DATE_FORMATTER = DateTimeFormatter.ofPattern(READABLE_DATE_FORMAT);
 
 	// Converts String date in ISO 8601 format to ZonedDateTime object 
