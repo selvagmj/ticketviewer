@@ -10,10 +10,11 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -26,18 +27,18 @@ import com.zendesk.ticketviewer.config.Config;
 
 public class TicketHttpClient {
 	
+	private static final Logger LOGGER = Logger.getLogger(TicketHttpClient.class.getName());
+	
 	private static final String TICKETS_API_PATH = "/api/v2/tickets";
 	private static final String SEPARATOR = "/";
 	
 	private String url;
 	private Map<String, String> queryParam = new HashMap<>();
+	private Map<String, String> headers = new HashMap<>();
 	
 	public TicketHttpClient() {
-		this.url = Config.getSource() + SEPARATOR + TICKETS_API_PATH;
-	}
-	
-	public void setPath(String path) {
-		this.url = path;
+		this.url = Config.getDomain() + SEPARATOR + TICKETS_API_PATH;
+		this.headers.put("Accept", "application/json");
 	}
 	
 	public void addQueryParams(String key, String value) {
@@ -45,12 +46,60 @@ public class TicketHttpClient {
 	}
 	
 	public void addPath(Object path) {
-		this.url += SEPARATOR + Objects.toString(path, null);
+		if(path != null) {
+			this.url += SEPARATOR + Objects.toString(path);
+		}
+	}
+	
+	public Response get() {
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		try {
+			URIBuilder uriBuilder = new URIBuilder(this.url + ".json");
+			setQueryParams(uriBuilder);
+			
+			HttpGet httpGet = new HttpGet(uriBuilder.build());
+			setHeaders(httpGet);
+	    	setAuthentication(httpGet);
+	    	
+	    	CloseableHttpResponse response = httpclient.execute(httpGet);
+	        return getResponse(response);
+		}
+		catch(IOException e) {
+			LOGGER.log(Level.SEVERE, "Cannot complete get request", e);
+		}
+		catch (URISyntaxException e) {
+			LOGGER.log(Level.SEVERE, "Cannot generate request url", e);
+		}
+	    finally {
+	    	try {
+				httpclient.close();
+			} catch (IOException e) {
+				LOGGER.log(Level.SEVERE, "Cannot close http client connection", e);
+			}
+	    }
+		return null;
 	}
 
-	private Response getResponse(CloseableHttpResponse response1) throws IOException {
-		Response response;
-		HttpEntity entity = response1.getEntity();
+	private void setHeaders(HttpGet httpGet) {
+		for(Map.Entry<String, String> entry : this.headers.entrySet()) {
+			httpGet.setHeader(entry.getKey(), entry.getValue());
+		}
+	}
+
+	private void setQueryParams(URIBuilder uriBuilder) {
+		for(Map.Entry<String, String> entry : this.queryParam.entrySet()) {
+			uriBuilder.addParameter(entry.getKey(), entry.getValue());
+		}
+	}
+
+	private void setAuthentication(HttpRequestBase httpGet) throws UnsupportedEncodingException {
+		byte[] bytes = (Config.getUsername() + "/token:" + Config.getAPIToken()).getBytes("UTF-8");
+		String encoding = Base64.getEncoder().encodeToString(bytes);
+		httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + encoding);
+	}
+
+	private Response getResponse(CloseableHttpResponse response) throws IOException {
+		HttpEntity entity = response.getEntity();
 		InputStream in = entity.getContent();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		StringBuilder result = new StringBuilder();
@@ -58,40 +107,9 @@ public class TicketHttpClient {
 		while((line = reader.readLine()) != null) {
 		    result.append(line);
 		}
-		response = new Response(response1.getStatusLine().getStatusCode(), result.toString());
+		Response ticketViewerResponse = new Response(response.getStatusLine().getStatusCode(), result.toString());
 		EntityUtils.consume(entity);
-		return response;
-	}
-	
-	public Response get() throws URISyntaxException {
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		URIBuilder uriBuilder = new URIBuilder(this.url + ".json");
-		for(Map.Entry<String, String> entry : this.queryParam.entrySet()) {
-			uriBuilder.addParameter(entry.getKey(), entry.getValue());
-		}
-		HttpGet httpGet = new HttpGet(uriBuilder.build());
-	    httpGet.setHeader("Accept", "*/*");
-		CloseableHttpResponse response1 = null;
-		Response response = null;
-	    try {
-	    	setAuthentication(httpGet);
-			response1 = httpclient.execute(httpGet);
-	        response = getResponse(response1);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	    finally {
-	    	
-	    }
-	    return response;
-	}
-
-	private void setAuthentication(HttpRequestBase httpGet) throws UnsupportedEncodingException {
-		byte[] bytes = (Config.getUsername() + ":" + Config.getPassword()).getBytes("UTF-8");
-		String encoding = Base64.getEncoder().encodeToString(bytes);
-		httpGet.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + encoding);
+		return ticketViewerResponse;
 	}
 	
 }
